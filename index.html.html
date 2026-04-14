@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo · Liderazgo al Día | Esencia del Líder</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --azul-oscuro: #0D1B40;
+    --azul-medio: #1A3A7A;
+    --azul-acento: #2563EB;
+    --dorado: #C9A84C;
+    --dorado-claro: #F0D48A;
+    --crema: #FAF8F4;
+    --gris-fondo: #F4F3EF;
+    --gris-borde: #E0DDD6;
+    --texto-principal: #1A1A1A;
+    --texto-muted: #6B6860;
+    --blanco: #FFFFFF;
+    --radio: 12px;
+    --radio-sm: 6px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--crema);
+    color: var(--texto-principal);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .hero {
+    background: var(--azul-oscuro);
+    padding: 3rem 2rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.08);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 10%;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(37,99,235,0.1);
+  }
+  .hero-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--dorado-claro);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-bottom: 1.25rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 600;
+    color: #FFFFFF;
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+  }
+  .hero h1 span { color: var(--dorado); }
+  .hero p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 300;
+    max-width: 520px;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .hero-stat {
+    text-align: left;
+  }
+  .hero-stat .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    color: var(--dorado);
+    font-weight: 600;
+    line-height: 1;
+  }
+  .hero-stat .lbl {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* LAYOUT */
+  .main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* FILTROS */
+  .filters-bar {
+    background: var(--blanco);
+    border: 1px solid var(--gris-borde);
+    border-radius: var(--radio);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-end;
+  }
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 180px;
+  }
+  .filter-group label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--texto-muted);
+  }
+  .filter-group input,
+  .filter-group select {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    border: 1px solid var(--gris-borde);
+    border-radius: var(--radio-sm);
+    padding: 8px 12px;
+    background: var(--crema);
+    color: var(--texto-principal);
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  .filter-group input:focus,
+  .filter-group select:focus { border-color: var(--azul-acento); background: #fff; }
+  .filter-group select { cursor: pointer; }
+
+  .results-info {
+    font-size: 13px;
+    color: var(--texto-muted);
+    margin-bottom: 1rem;
+  }
+  .results-info strong { color: var(--texto-principal); }
+
+  /* GRID DE CURSOS */
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+  }
+
+  /* TARJETA */
+  .card {
+    background: var(--blanco);
+    border: 1px solid var(--gris-borde);
+    border-radius: var(--radio);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(13,27,64,0.1);
+  }
+  .card-accent {
+    height: 4px;
+    width: 100%;
+  }
+  .card-body { padding: 1.25rem; flex: 1; }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+  .badge-esencia {
+    background: #EEF2FF;
+    color: #3730A3;
+  }
+  .badge-categoria {
+    background: #FEF3C7;
+    color: #92400E;
+  }
+  .badge-area {
+    background: #ECFDF5;
+    color: #065F46;
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--texto-principal);
+    line-height: 1.35;
+    margin-bottom: 0.6rem;
+  }
+  .card-objetivo {
+    font-size: 13px;
+    color: var(--texto-muted);
+    line-height: 1.55;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .card-footer {
+    padding: 0.9rem 1.25rem;
+    border-top: 1px solid var(--gris-fondo);
+    background: var(--gris-fondo);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .card-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .info-pill {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--texto-muted);
+  }
+  .info-pill svg { flex-shrink: 0; }
+
+  .btn-ver {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 100px;
+    border: 1px solid var(--azul-acento);
+    background: transparent;
+    color: var(--azul-acento);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-ver:hover { background: var(--azul-acento); color: #fff; }
+  .btn-ver.disabled {
+    border-color: var(--gris-borde);
+    color: var(--texto-muted);
+    cursor: default;
+    pointer-events: none;
+  }
+
+  /* COLORES POR ESENCIA */
+  .accent-movilizo { background: linear-gradient(90deg, #2563EB, #60A5FA); }
+  .accent-conecto  { background: linear-gradient(90deg, #7C3AED, #A78BFA); }
+  .accent-desarrollo { background: linear-gradient(90deg, #059669, #34D399); }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(13,27,64,0.55);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--blanco);
+    border-radius: 16px;
+    max-width: 640px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+  }
+  .modal-hero {
+    padding: 2rem 2rem 1.5rem;
+    background: var(--azul-oscuro);
+    border-radius: 16px 16px 0 0;
+  }
+  .modal-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
+  .modal-badge {
+    font-size: 11px; font-weight: 500; padding: 4px 10px;
+    border-radius: 100px;
+    background: rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.8);
+  }
+  .modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.3;
+  }
+  .modal-body { padding: 1.75rem 2rem 2rem; }
+  .modal-section { margin-bottom: 1.5rem; }
+  .modal-section h3 {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--texto-muted);
+    margin-bottom: 0.5rem;
+  }
+  .modal-section p {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--texto-principal);
+  }
+  .objetivos-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .objetivos-list li {
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--texto-principal);
+    padding-left: 20px;
+    position: relative;
+  }
+  .objetivos-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--azul-acento);
+    font-size: 13px;
+  }
+  .modal-meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .meta-item {
+    background: var(--gris-fondo);
+    border-radius: var(--radio-sm);
+    padding: 12px;
+  }
+  .meta-item .meta-lbl {
+    font-size: 11px;
+    color: var(--texto-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+  .meta-item .meta-val {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--texto-principal);
+  }
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: #fff;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .modal-close:hover { background: rgba(255,255,255,0.28); }
+  .modal-footer {
+    padding: 1rem 2rem 1.5rem;
+    border-top: 1px solid var(--gris-borde);
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 500;
+    padding: 10px 24px;
+    border-radius: 100px;
+    background: var(--azul-acento);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: #1d4ed8; }
+  .btn-secondary {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 500;
+    padding: 10px 24px;
+    border-radius: 100px;
+    background: transparent;
+    color: var(--texto-principal);
+    border: 1px solid var(--gris-borde);
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .btn-secondary:hover { border-color: #aaa; }
+
+  .no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--texto-muted);
+    font-size: 15px;
+  }
+  .no-results strong { display: block; font-size: 1.1rem; color: var(--texto-principal); margin-bottom: 0.5rem; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 2rem 1.25rem 2rem; }
+    .hero-stats { gap: 1.5rem; }
+    .filters-bar { padding: 1rem; }
+    .courses-grid { grid-template-columns: 1fr; }
+    .modal-meta-grid { grid-template-columns: 1fr; }
+    .modal-hero, .modal-body, .modal-footer { padding-left: 1.25rem; padding-right: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge" style="display:flex;align-items:center;gap:8px;">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAn0AAAJ+CAMAAADxOUZRAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAMAUExURQAAAP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wc9CwgAAAEAdFJOUwADBAINKSsmL1VhXkgOEhsuP0NZaGdwiJKUobK0s7G2ztbUxqI2Bx4sPFFfZXeKqLm9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" alt="Mi Portal" style="height:22px;width:auto;filter:brightness(0) invert(1) opacity(0.85);">
+      Mi Portal
+    </div>
+    <h1>Liderazgo al Día<br><span>Esencia del Líder</span></h1>
+    <p>Habilidades para conocer y aprender a cualquier hora, en cualquier lugar. Solo necesitas conexión a internet.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num" id="total-count">30</div><div class="lbl">Cursos disponibles</div></div>
+      <div class="hero-stat"><div class="num">1h 15m</div><div class="lbl">Duración por curso</div></div>
+      <div class="hero-stat"><div class="num">3</div><div class="lbl">Esencia del líder</div></div>
+      <div class="hero-stat"><div class="num">70</div><div class="lbl">Nota mínima de aprobación</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- FILTROS -->
+  <div class="filters-bar">
+    <div class="filter-group" style="flex:2; min-width:220px;">
+      <label>Buscar curso</label>
+      <input type="text" id="search" placeholder="Ej. feedback, liderazgo, equipo…">
+    </div>
+    <div class="filter-group">
+      <label>Esencia</label>
+      <select id="filter-esencia">
+        <option value="">Todas</option>
+        <option>Movilizo la Estrategía</option>
+        <option>Conecto con Proposito</option>
+        <option>Desarrollo Potenciales</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Categoría</label>
+      <select id="filter-categoria">
+        <option value="">Todas</option>
+        <option>Gestión del Desempeño</option>
+        <option>Liderazgo</option>
+        <option>Diversidad, Equidad e Inclusión</option>
+        <option>Bienestar</option>
+        <option>Cultura - Ambiente Laboral</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Área de conocimiento</label>
+      <select id="filter-area">
+        <option value="">Todas</option>
+        <option>Liderazgo y equipos de alto rendimiento</option>
+        <option>Bienestar y felicidad</option>
+        <option>Sostenibilidad, diversidad y Agenda 2030</option>
+        <option>Comunicación y relaciones interpersonales</option>
+        <option>Eficacia y productividad digital</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="results-info"><strong id="results-num">30</strong> cursos encontrados</div>
+
+  <!-- GRID -->
+  <div class="courses-grid" id="courses-grid"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal-box">
+    <div class="modal-hero" id="modal-hero-bg">
+      <button class="modal-close" onclick="document.getElementById('modal-overlay').classList.remove('open')">✕</button>
+      <div class="modal-badges" id="modal-badges"></div>
+      <div class="modal-title" id="modal-title"></div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <h3>Objetivo del curso</h3>
+        <p id="modal-objetivo"></p>
+      </div>
+      <div class="modal-section" id="modal-desc-section">
+        <h3>Lo que aprenderás</h3>
+        <ul class="objetivos-list" id="modal-aprenderás"></ul>
+      </div>
+      <div class="modal-section">
+        <h3>Información del curso</h3>
+        <div class="modal-meta-grid">
+          <div class="meta-item"><div class="meta-lbl">Tipo de actividad</div><div class="meta-val" id="modal-tipo"></div></div>
+          <div class="meta-item"><div class="meta-lbl">Duración</div><div class="meta-val" id="modal-duracion"></div></div>
+          <div class="meta-item"><div class="meta-lbl">Modo de superación</div><div class="meta-val" id="modal-modo"></div></div>
+          <div class="meta-item"><div class="meta-lbl">Área de conocimiento</div><div class="meta-val" id="modal-area"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#" id="modal-btn-acceder" class="btn-primary" target="_blank">Ir al curso en Mi Portal →</a>
+      <button class="btn-secondary" onclick="document.getElementById('modal-overlay').classList.remove('open')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const courses = [
+  {esencia:"Movilizo la Estrategía",categoria:"Gestión del Desempeño",nombre:"Dirección por objetivos para garantizar resultados extraordinarios",objetivo:"Aportar las claves para conocer el modelo Dirección por Objetivos que permita marcar metas y estándares de cumplimiento, asignar prioridades, hacer seguimiento de colaboradores y contar con criterios de medición del rendimiento del equipo adecuados.",descripcion:"1. Define áreas de resultados clave\n2. Formula objetivos entre los niveles de la organización\n3. Define indicadores y estándares\n4. Realiza planes de acción\n5. Realiza seguimiento del plan de acción\n6. Establece sistemas de información y de control",area:"Liderazgo y equipos de alto rendimiento",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Conecto con Proposito",categoria:"Liderazgo",nombre:"Cómo ser un buen líder",objetivo:"Aportar las claves para liderar equipos de trabajo, adaptarse a los diferentes perfiles de colaboradores, motivar, comunicar, supervisar, controlar, orientar y desarrollar con el fin de lograr equipos eficientes.",descripcion:"1. Dirige\n2. Promueve cambios\n3. Consigue resultados\n4. Inspira\n5. Comunica\n6. Lidera y aplica el coaching",area:"Liderazgo y equipos de alto rendimiento",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Conecto con Proposito",categoria:"Diversidad, Equidad e Inclusión",nombre:"Lidera en la diversidad con éxito",objetivo:"Aportar las claves para potenciar la capacidad de liderar equipos diversos, potenciando entornos y equipos inclusivos.",descripcion:"1. Causa una buena impresión en los demás\n2. Desarrolla la persuasión para convencer\n3. Haz conexión con tu interlocutor\n4. Logra tener un impacto con tu interlocutor",area:"Sostenibilidad, diversidad y Agenda 2030",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Conecto con Proposito",categoria:"Diversidad, Equidad e Inclusión",nombre:"Liderazgo intergeneracional",objetivo:"Aportar las claves para potenciar la capacidad de liderar equipos de diversas generaciones, adaptando el estilo de liderazgo a cada perfil, aprovechando las diferencias y tratando de minimizar las dificultades culturales.",descripcion:"1. Entiende las particularidades de las diferentes generaciones\n2. Promueve el liderazgo informal e inclusivo\n3. Adapta el estilo de liderazgo a los diferentes perfiles\n4. Fomenta la participación, el autodesarrollo y la libertad",area:"Sostenibilidad, diversidad y Agenda 2030",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Movilizo la Estrategía",categoria:"Gestión del Desempeño",nombre:"Transmitir la visión de negocio",objetivo:"Aportar las claves y comportamientos de éxito para transmitir la visión de negocio de tu empresa de forma clara, coherente, atractiva y motivadora, para así facilitar que el equipo se comprometa con ella.",descripcion:"1. Comunica objetivos a largo plazo\n2. Alinea los objetivos a corto plazo con la visión\n3. Fomenta la confianza y el compromiso\n4. Crea canales de participación",area:"Liderazgo y equipos de alto rendimiento",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Conecto con Proposito",categoria:"Gestión del Desempeño",nombre:"Autoconfianza como palanca para conseguir tus metas",objetivo:"Aportar las claves para desarrollar la autoconfianza, mejorar la seguridad en ti, incrementar tu autoestima y reconocer tu valor propio para que puedas superar los miedos y las creencias limitantes.",descripcion:"1. Autoconocimiento: conoce tus puntos fuertes y tus límites\n2. Genera pensamientos y emociones positivos\n3. Domina las fluctuaciones de tu propia confianza\n4. Aborda nuevos retos\n5. Desarrolla la confianza en tus relaciones",area:"Bienestar y felicidad",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Conecto con Proposito",categoria:"Gestión del Desempeño",nombre:"Automotivación: el secreto de las personas exitosas",objetivo:"Aportar las claves para alcanzar un nivel pleno de automotivación, así como desarrollar la ilusión y el entusiasmo en el ámbito profesional y laboral.",descripcion:"1. Identifica el nivel de motivación\n2. Encuentra sentido en la actividad\n3. Canaliza la energía con base en los valores personales\n4. Desarrolla actividades constructivas\n5. Define metas para actuar",area:"Bienestar y felicidad",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Conecto con Proposito",categoria:"Liderazgo",nombre:"Cómo desarrollar tu inteligencia emocional",objetivo:"Aportar las claves para conocer las propias emociones, regularlas, para saber motivarse a uno mismo y motivar al equipo, mejorar la empatía y mejorar las habilidades sociales.",descripcion:"1. Conoce tus propias emociones\n2. Maneja las emociones\n3. Motívate a ti mismo\n4. Reconoce las emociones de los demás\n5. Desarrolla las habilidades sociales",area:"Bienestar y felicidad",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Movilizo la Estrategía",categoria:"Gestión del Desempeño",nombre:"Pensamiento crítico: piensa más y acertarás",objetivo:"Aportar las claves para analizar la información y racionalizar tu pensamiento. Analiza de forma crítica para no cometer errores ni caer en sesgos inconscientes. Racionaliza tu pensamiento para decidir mejor y más rápido.",descripcion:"1. Analizar la información\n2. Superar desviaciones\n3. Gestionar tus emociones para evitar que te afecten negativamente\n4. Reflexionar sobre las implicaciones de tu pensamiento",area:"Liderazgo y equipos de alto rendimiento",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Movilizo la Estrategía",categoria:"Gestión del Desempeño",nombre:"Pensamiento analítico: la clave de tus buenas decisiones",objetivo:"Aportar las claves para potenciar tu capacidad de analizar objetivamente la información. Así tomarás mejores decisiones, resolverás mejor los problemas sin dejarte llevar por emociones.",descripcion:"1. Definir el propósito de tu pensamiento\n2. Analizar los diferentes puntos de vista\n3. Encontrar datos objetivos que contrasten suposiciones\n4. Reflexionar sobre las implicaciones y consecuencias\n5. Tener claros los conceptos y paradigmas\n6. Hacerte preguntas para exponer y clarificar el problema",area:"Liderazgo y equipos de alto rendimiento",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Conecto con Proposito",categoria:"Bienestar",nombre:"Equilibrio entre el trabajo y la vida privada para alcanzar el bienestar",objetivo:"Aportar las claves para conocer el equilibrio entre tu vida profesional y personal, analizar tu nivel de estrés, dando prioridad a tus necesidades, desconectándote del trabajo y uniéndote a la moda de la felicidad.",descripcion:"1. Conoce tu nivel de bienestar, felicidad y tus necesidades personales\n2. Armoniza tus necesidades personales y la vida profesional\n3. Únete a la moda de la felicidad\n4. Abraza el bienestar\n5. Desconéctate",area:"Bienestar y felicidad",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Movilizo la Estrategía",categoria:"Gestión del Desempeño",nombre:"Orientación hacia el logro: consigue resultados dirigiendo tus objetivos",objetivo:"Aportar las claves para desarrollar la capacidad de lograr resultados, superando retos y dificultades y asumiendo una responsabilidad y compromiso, con el fin de incrementar la eficacia y eficiencia personales.",descripcion:"1. Conoce los objetivos marcados y establece prioridades\n2. Responsabilízate para conseguir los objetivos\n3. Colabora con otras personas para lograr resultados\n4. Aporta soluciones\n5. Orienta el desempeño a la superación y a la mejora continua",area:"Liderazgo y equipos de alto rendimiento",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Conecto con Proposito",categoria:"Liderazgo",nombre:"Teambuilding: aprovecha las sinergias de tu equipo",objetivo:"Aportar las claves y pautas para favorecer la construcción y consolidación de un equipo efectivo mediante la generación de una visión de equipo única y la gestión de emociones colectivas positivas.",descripcion:"1. Ten una visión de equipo\n2. Conoce tu rol en el equipo\n3. Identifica emociones\n4. Desarrolla una actitud positiva\n5. Genera compromiso",area:"Liderazgo y equipos de alto rendimiento",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Movilizo la Estrategía",categoria:"Gestión del Desempeño",nombre:"Toma decisiones inteligentes y acertadas",objetivo:"Aportar las claves para tomar decisiones de forma inteligente, actuando con confianza y responsabilidad para lograr alcanzar los objetivos personales y profesionales de manera eficiente.",descripcion:"1. Establece criterios a la hora de tomar decisiones\n2. Analiza las consecuencias de las decisiones\n3. Sé creativo en la toma de decisiones\n4. Ejecuta la decisión tomada\n5. Evalúa la decisión",area:"Eficacia y productividad digital",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Movilizo la Estrategía",categoria:"Gestión del Desempeño",nombre:"Resolución eficaz de problemas",objetivo:"Aportar las claves para desarrollar una metodología de pensamiento, análisis y trabajo que permita llegar a consensos y agilizar la implementación de soluciones a problemas.",descripcion:"1. Recopila y analiza la información\n2. Identifica los puntos críticos\n3. Propón y determina soluciones a la situación\n4. Agiliza la implementación de la mejor solución",area:"Eficacia y productividad digital",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Desarrollo Potenciales",categoria:"Liderazgo",nombre:"Empodérate. Sé el protagonista de tu vida",objetivo:"Aportar las claves para tomar las riendas de tu vida, superar tus miedos y confiar en tus capacidades al afrontar conflictos y situaciones difíciles tanto a nivel personal como profesional.",descripcion:"1. Incrementar tu autoestima\n2. Superar el miedo paralizante\n3. Dejar de ser una víctima\n4. Reducir tu dependencia a los demás\n5. Afrontar las situaciones y los conflictos con seguridad",area:"Bienestar y felicidad",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Desarrollo Potenciales",categoria:"Liderazgo",nombre:"Lidera el desarrollo de tu equipo",objetivo:"Aportar las claves para formar y desarrollar equipos de trabajo, saber adaptarse a los diferentes perfiles de colaboradores y establecer estrategias proactivas y reactivas de formación, desarrollo y seguimiento.",descripcion:"1. Analiza el estado de competencias del equipo\n2. Establece prioridades de desarrollo proactivo\n3. Detecta las necesidades de desarrollo\n4. Trata con colaboradores reactivos\n5. Fomenta el autodesarrollo del colaborador",area:"Liderazgo y equipos de alto rendimiento",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Desarrollo Potenciales",categoria:"Gestión del Desempeño",nombre:"Construye un equipo de alto rendimiento",objetivo:"Aportar las claves para construir un equipo de alto rendimiento, transformando a los diferentes profesionales a tu cargo en un grupo motivado, comprometido y efectivo.",descripcion:"1. Fomenta la renovación\n2. Dirige al equipo\n3. Adecúa el equipo a la organización\n4. Fomenta la interrelación entre los miembros",area:"Liderazgo y equipos de alto rendimiento",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Movilizo la Estrategía",categoria:"Gestión del Desempeño",nombre:"Evaluación del desempeño como herramienta para incrementar el compromiso y los resultados",objetivo:"Aportar las claves para mejorar la comunicación y el rendimiento del equipo, creando espacios de diálogo y dando feedback, con el fin de aumentar el compromiso y los resultados.",descripcion:"1. Recopila datos y prepara la entrevista\n2. Genera un contexto de confianza\n3. Aporta hechos concretos en el feedback\n4. Escucha activamente\n5. Define un plan de acción",area:"Liderazgo y equipos de alto rendimiento",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Movilizo la Estrategía",categoria:"Gestión del Desempeño",nombre:"Podcast: Manual para dirigir una entrevista de evaluación del desempeño",objetivo:"Aportar las claves para mejorar la comunicación y el rendimiento del equipo, creando espacios de diálogo y feedback a fin de aumentar el compromiso y los resultados.",descripcion:"1. Recoger datos y preparar la entrevista\n2. Generar un contexto tranquilo y de confianza\n3. Aportar los hechos concretos que se quieren (dar feedback)\n4. Escuchar activamente al interlocutor\n5. Definir un plan de acción",area:"Liderazgo y equipos de alto rendimiento",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Desarrollo Potenciales",categoria:"Gestión del Desempeño",nombre:"Cómo dar feedback constructivo y transformador",objetivo:"Aportar las claves para dar un feedback adecuado que permita desarrollar la capacidad del equipo, fomentar la comunicación transparente, reconocer el esfuerzo de los profesionales, así como sus fortalezas y áreas de mejora.",descripcion:"1. Informar de las expectativas\n2. Investiga los hechos\n3. Busca el momento más adecuado\n4. Especifica o concreta la situación\n5. Crea un plan de acción",area:"Liderazgo y equipos de alto rendimiento",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Conecto con Proposito",categoria:"Gestión del Desempeño",nombre:"Cómo gestionar equipos híbridos",objetivo:"Aportar las claves para acortar la distancia física y emocional con los colaboradores, aplicando técnicas de liderazgo que fomenten la implicación, la motivación y la consecución de objetivos.",descripcion:"1. Superar las dificultades de la comunicación\n2. Comprometer, transmitir objetivos y delegar\n3. Motivar y crear relaciones\n4. Supervisar las tareas y proyectos\n5. Liderar reuniones híbridas\n6. Gestionar conflictos",area:"Liderazgo y equipos de alto rendimiento",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Desarrollo Potenciales",categoria:"Gestión del Desempeño",nombre:"Desarrolla tu capacidad para trabajar en equipos de alto rendimiento",objetivo:"Aportar las claves para aprender a fomentar la cooperación en equipos de alto rendimiento por medio de técnicas y conceptos básicos de trabajo en equipo, la generación de confianza, el conocimiento de las fortalezas y debilidades.",descripcion:"1. Conoce a los miembros de tu equipo\n2. Desarrolla relaciones de confianza\n3. Defiende el objetivo común\n4. Obtén los resultados\n5. Afronta las situaciones difíciles en el equipo",area:"Liderazgo y equipos de alto rendimiento",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Movilizo la Estrategía",categoria:"Cultura - Ambiente Laboral",nombre:"Cómo implantar una cultura de innovación",objetivo:"Aportar las claves para desarrollar una cultura innovadora dentro de la empresa mediante un ambiente controlado de creatividad que promueva la eficiencia y la aportación de ideas de todos los colaboradores.",descripcion:"1. Promueve una cultura para generar ideas\n2. Investiga para innovar\n3. Canaliza ideas\n4. Apoya y premia iniciativas de valor",area:"Liderazgo y equipos de alto rendimiento",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Conecto con Proposito",categoria:"Liderazgo",nombre:"Domina tu habilidad para influir en los demás con tu comunicación",objetivo:"Aportar las claves para mejorar la capacidad de influir en los demás por medio de una comunicación de alto impacto que permita convencer, implicar, negociar e interactuar con éxito en cualquier entorno.",descripcion:"1. Causa una buena impresión en los demás\n2. Desarrolla la persuasión para convencer\n3. Haz conexión con tu interlocutor\n4. Logra tener un impacto con tu interlocutor",area:"Comunicación y relaciones interpersonales",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Conecto con Proposito",categoria:"Diversidad, Equidad e Inclusión",nombre:"Fomenta la igualdad de género en tu entorno",objetivo:"Aportar las claves para implementar los principios de igualdad de género en tu entorno personal y laboral, con la meta de disminuir la discriminación de mujeres y niñas.",descripcion:"1. Superar sesgos inconscientes\n2. Impulsar la equidad en tu entorno profesional y personal\n3. Evitar los micromachismos\n4. Utilizar el lenguaje inclusivo",area:"Sostenibilidad, diversidad y Agenda 2030",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Conecto con Proposito",categoria:"Diversidad, Equidad e Inclusión",nombre:"Empoderamiento femenino",objetivo:"Aportar las claves para promover el empoderamiento femenino, tanto en tu entorno profesional como en el personal y fomentar así la inclusión, la diversidad y la igualdad de oportunidades.",descripcion:"1. Crear una visión empoderada\n2. Cuestionar tus creencias limitantes como mujer\n3. Descubrirte y construir tu marca\n4. Crear una red de contactos profesionales para hacerte visible",area:"Sostenibilidad, diversidad y Agenda 2030",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Conecto con Proposito",categoria:"Diversidad, Equidad e Inclusión",nombre:"Mejora tu competencia intercultural para trabajar en entornos diversos",objetivo:"Aportar las claves para mejorar el autoconocimiento y sensibilidad interculturales para superar los propios sesgos y aprender a adaptarse a trabajar en entornos diversos y multiculturales.",descripcion:"1. Practica el autoconocimiento cultural\n2. Ten sensibilidad intercultural\n3. Conoce los valores y creencias de los demás\n4. Mantén una comunicación intercultural",area:"Sostenibilidad, diversidad y Agenda 2030",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Conecto con Proposito",categoria:"Diversidad, Equidad e Inclusión",nombre:"Gestiona la diversidad en tu entorno de trabajo",objetivo:"Aportar las claves para favorecer las habilidades y conocimientos básicos para trabajar y gestionar entornos diversos e inclusivos que ayuden a fomentar la innovación, la creatividad y la eficiencia.",descripcion:"1. Comprende cómo se crea la realidad\n2. Descubre el talento diverso\n3. Elimina las barreras a la diversidad y la igualdad\n4. Potencia tu poder personal para crear felicidad",area:"Sostenibilidad, diversidad y Agenda 2030",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""},
+  {esencia:"Desarrollo Potenciales",categoria:"Liderazgo",nombre:"Feedback como herramienta de crecimiento personal",objetivo:"Aportar las claves para dar feedback de manera directa, honesta y sincera como observador del comportamiento, y aprender a recibirlo con interés y con una actitud positiva a fin de mejorar en nuestra labor profesional y de lograr un crecimiento personal.",descripcion:"1. Recaba información objetiva\n2. Pon el enfoque en lo que haces\n3. Acepta feedback\n4. Detecta modelos y herramientas de feedback\n5. Realiza seguimiento del feedback y la transferencia",area:"Comunicación y relaciones interpersonales",tipo:"Curso elearning",modo:"Aprobar y completar (70)",duracion:"1h 15min",enlace:""}
+];
+
+const accentMap = {
+  "Movilizo la Estrategía": "accent-movilizo",
+  "Conecto con Proposito": "accent-conecto",
+  "Desarrollo Potenciales": "accent-desarrollo"
+};
+
+function getAccent(esencia) {
+  return accentMap[esencia] || "accent-movilizo";
+}
+
+function renderCards(list) {
+  const grid = document.getElementById('courses-grid');
+  document.getElementById('results-num').textContent = list.length;
+  if (list.length === 0) {
+    grid.innerHTML = '<div class="no-results"><strong>No encontramos cursos</strong>Prueba con otros términos de búsqueda o filtros.</div>';
+    return;
+  }
+  grid.innerHTML = list.map((c, i) => `
+    <div class="card" onclick="openModal(${i})" data-idx="${i}">
+      <div class="card-accent ${getAccent(c.esencia)}"></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="badge badge-esencia">${c.esencia}</span>
+          <span class="badge badge-categoria">${c.categoria}</span>
+        </div>
+        <div class="card-title">${c.nombre}</div>
+        <div class="card-objetivo">${c.objetivo}</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-info">
+          <div class="info-pill">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="#888780" stroke-width="1.1"/><path d="M6.5 4v3l1.8 1.8" stroke="#888780" stroke-width="1.1" stroke-linecap="round"/></svg>
+            ${c.duracion}
+          </div>
+          <div class="info-pill">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1.5" y="2" width="10" height="9" rx="1.5" stroke="#888780" stroke-width="1.1"/><path d="M1.5 5h10" stroke="#888780" stroke-width="1.1"/><path d="M4 1v2M9 1v2" stroke="#888780" stroke-width="1.1" stroke-linecap="round"/></svg>
+            ${c.tipo}
+          </div>
+        </div>
+        <span class="badge badge-area" style="font-size:10px;">${c.area.split(' ')[0]}…</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+let currentFiltered = [...courses];
+
+function filterAndRender() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const esencia = document.getElementById('filter-esencia').value;
+  const cat = document.getElementById('filter-categoria').value;
+  const area = document.getElementById('filter-area').value;
+
+  currentFiltered = courses.filter(c => {
+    const matchQ = !q || c.nombre.toLowerCase().includes(q) || c.objetivo.toLowerCase().includes(q) || c.descripcion.toLowerCase().includes(q);
+    const matchE = !esencia || c.esencia === esencia;
+    const matchC = !cat || c.categoria === cat;
+    const matchA = !area || c.area === area;
+    return matchQ && matchE && matchC && matchA;
+  });
+  renderCards(currentFiltered);
+}
+
+document.getElementById('search').addEventListener('input', filterAndRender);
+document.getElementById('filter-esencia').addEventListener('change', filterAndRender);
+document.getElementById('filter-categoria').addEventListener('change', filterAndRender);
+document.getElementById('filter-area').addEventListener('change', filterAndRender);
+
+function openModal(globalIdx) {
+  const c = courses[globalIdx];
+  document.getElementById('modal-badges').innerHTML = `
+    <span class="modal-badge">${c.esencia}</span>
+    <span class="modal-badge">${c.categoria}</span>
+    <span class="modal-badge">${c.area}</span>
+  `;
+  document.getElementById('modal-title').textContent = c.nombre;
+  document.getElementById('modal-objetivo').textContent = c.objetivo;
+  const pasos = c.descripcion.split('\n').filter(l => l.trim());
+  document.getElementById('modal-aprenderás').innerHTML = pasos.map(p => `<li>${p.replace(/^\d+\.\s*/, '')}</li>`).join('');
+  document.getElementById('modal-tipo').textContent = c.tipo;
+  document.getElementById('modal-duracion').textContent = c.duracion;
+  document.getElementById('modal-modo').textContent = c.modo;
+  document.getElementById('modal-area').textContent = c.area;
+  const btn = document.getElementById('modal-btn-acceder');
+  if (c.enlace) {
+    btn.href = c.enlace;
+    btn.classList.remove('disabled');
+    btn.style.pointerEvents = '';
+    btn.textContent = 'Ir al curso en Mi Portal →';
+  } else {
+    btn.href = '#';
+    btn.classList.add('disabled');
+    btn.style.pointerEvents = 'none';
+    btn.textContent = 'Enlace próximamente disponible';
+    btn.style.background = '#9ca3af';
+  }
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('modal-overlay').classList.remove('open');
+});
+
+renderCards(courses);
+document.getElementById('total-count').textContent = courses.length;
+</script>
+</body>
+</html>
